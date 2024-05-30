@@ -177,7 +177,7 @@
               // Send form data to loginProcess.php using AJAX
               $.ajax({
                   type: "POST",
-                  url: "loginProcess.php",
+                  url: "process/loginProcess.php",
                   data: {
                       studentLoginName: username,
                       studentLoginPassword: password
@@ -265,7 +265,7 @@
             // Make AJAX request
             $.ajax({
                 type: "POST",
-                url: "signupProcess.php",
+                url: "process/signupProcess.php",
                 data: {
                     studentSignUpidNumber: studentSignUpidNumber,
                     studentSignUpName: studentSignUpName,

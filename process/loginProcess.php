@@ -1,5 +1,5 @@
 <?php
-include "myConnection.php";
+include "../process/myConnection.php";
 
     if (isset($_POST['studentLoginName']) && isset($_POST['studentLoginPassword'])) {
         $username = $_POST["studentLoginName"];

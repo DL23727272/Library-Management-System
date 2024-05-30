@@ -1,5 +1,5 @@
 <?php
-include "myConnection.php";
+include "../process/myConnection.php";
 
 if (isset($_POST['studentSignUpidNumber']) && isset($_POST['studentSignUpUsername']) && isset($_POST['studentSignUpName']) && isset($_POST['studentDepartment']) && isset($_POST['studentSignUpPassword'])) {
     $idNumber = $_POST["studentSignUpidNumber"];
