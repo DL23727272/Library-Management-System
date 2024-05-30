@@ -68,10 +68,10 @@
               <!-- for logo -->
               <img src="img/logo.png" alt="" style="width: 60px;" /> 
             </div>
-            <h3 class="flex-start">Library Users Registration</h3>
+            <h3 class="flex-start fw-bold" >Library Users Registration</h3>
             <div>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
-                <i class="fa-solid fa-mug-hot" id="mugIcon"></i>
+                <i class="fa-solid fa-bars" id="mugIcon"></i>
               </button>
             </div>
           </div>
@@ -83,24 +83,23 @@
       <img src="img/bg.jpg" alt="image" class="login__bg" >
 
       
-    <!-- LOGIN FORM -->
+      <!-- LOGIN FORM -->
     <section class="vh-100">
         <div class="container d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="login_card card">
                     <form enctype="multipart/form-data" method="POST" class="mt-1">
-                        
                         <div class="m-5">
-                            <div class="form-group my-5 mx-5">
+                            <div class="form-group d-flex justify-content-center my-5">
                                 <img src="img/logo.png" alt="LOGO" style="width: 90px;">
                             </div>
                             <div class="form-group my-4">
-                                <label for="Name" style="font-weight: 700;"><i class="fa-solid fa-signature"></i> Username</label>
-                                <input type="text" name="customerName" id="customerName" placeholder="Enter Username" class="form-control" required>
+                                <label for="Name" style="font-weight: 700;">Username</label>
+                                <input type="text" name="studentName" id="studentName" placeholder="Enter Username" class="form-control" required>
                             </div>
                             <div class="form-group my-4">
-                                <label for="pass" style="font-weight: 700;"><i class="fa-solid fa-lock"></i> Password</label>
-                                <input type="password" name="customerPassword" id="customerPassword" placeholder="Enter Password" class="form-control" required>
+                                <label for="pass" style="font-weight: 700;">Password</label>
+                                <input type="password" name="studentPassword" id="studentPassword" placeholder="Enter Password" class="form-control" required>
                             </div>
                             <div class="col-sm">
                                 <p style="font-size: 13px; color: rgb(0, 0, 0);">
@@ -165,8 +164,8 @@
      
       //form validation
       function Login() {
-          var username = document.getElementById("customerName").value;
-          var password = document.getElementById("customerPassword").value;
+          var username = document.getElementById("studentName").value;
+          var password = document.getElementById("studentPassword").value;
       
           if (username == "" && password == "") {
               alertify.error('Empty fields! Please fill all the fields.');
@@ -180,8 +179,8 @@
                   type: "POST",
                   url: "loginProcess.php",
                   data: {
-                      customerLoginName: username,
-                      customerLoginPassword: password
+                      studentLoginName: username,
+                      studentLoginPassword: password
                   },
                   dataType: "json",
                   success: function(response) {
@@ -199,11 +198,11 @@
                           
 
                           var customerID = response.id;
-                          sessionStorage.setItem('customerID', customerID);
+                          sessionStorage.setItem('studentID', customerID);
       
-                          var customerNameInput = document.getElementById("customerName").value;
+                          var customerNameInput = document.getElementById("studentName").value;
                           var customerName = customerNameInput;
-                          sessionStorage.setItem('customerName', customerName); //tangina  40mins para dito
+                          sessionStorage.setItem('studentName', customerName); //tangina  40mins para dito
       
                           setTimeout(function() {
 
@@ -237,26 +236,42 @@
 
     function Signup() {
         // Get form data
-        var userSignUpName = $("#userSignUpName").val();
-        var userSignUpPassword = $("#userSignUpPassword").val();
+        var studentSignUpidNumber = $("#studentSignUpidNumber").val();
+        var studentSignUpName = $("#studentSignUpName").val();
+        var studentSignUpUsername = $("#studentSignUpUsername").val();
+        var studentDepartment = $("#studentDepartment").val();
+        var studentSignUpPassword = $("#studentSignUpPassword").val();
         var checkSignUpPassword = $("#checkSignUpPassword").val();
     
         // Check if passwords match
-        if (userSignUpPassword !== checkSignUpPassword) {
+        if (studentSignUpPassword !== checkSignUpPassword) {
             alertify.error('Passwords do not match!');
             return; 
         }
     
         // Check for empty fields
-        if (userSignUpName === "" || userSignUpPassword === "" || checkSignUpPassword === "") {
+        if (studentSignUpidNumber === "" || studentSignUpName === "" || studentSignUpUsername === "" || studentDepartment === "" || studentSignUpPassword === "" || checkSignUpPassword === "") {
             alertify.error('Empty fields! Please fill all the fields.');
         } else {
+            // Log data being sent to server
+            console.log({
+                studentSignUpidNumber: studentSignUpidNumber,
+                studentSignUpName: studentSignUpName,
+                studentSignUpUsername: studentSignUpUsername,
+                studentDepartment: studentDepartment,
+                studentSignUpPassword: studentSignUpPassword
+            });
+    
+            // Make AJAX request
             $.ajax({
                 type: "POST",
                 url: "signupProcess.php",
                 data: {
-                    userSignUpName: userSignUpName,
-                    userSignUpPassword: userSignUpPassword
+                    studentSignUpidNumber: studentSignUpidNumber,
+                    studentSignUpName: studentSignUpName,
+                    studentSignUpUsername: studentSignUpUsername,
+                    studentDepartment: studentDepartment,
+                    studentSignUpPassword: studentSignUpPassword
                 },
                 dataType: "json",
                 success: function(response) {
@@ -281,6 +296,7 @@
             });
         }
     }
+    
     
 
     </script>

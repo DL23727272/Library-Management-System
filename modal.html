@@ -1,0 +1,58 @@
+<!-- Signup MODAL -->
+<div class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.449); backdrop-filter: blur(10px);">
+            <div class="modal-header">
+                <img src="img/logo.png" alt="" style="width: 30px;">
+                <h5>ISPSC Library Management System</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" method="POST" class="mt-1" id="signupForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group my-4">
+                                <label for="idNumber" style="font-weight: 700;"><i class="fa-solid fa-id-card"></i> ID-Number</label>
+                                <input type="text" name="studentSignUpidNumber" id="studentSignUpidNumber" placeholder="Enter ID-Number" class="form-control" required>
+                            </div>
+                            <div class="form-group my-4">
+                                <label for="Name" style="font-weight: 700;"><i class="fa-solid fa-signature"></i> Username</label>
+                                <input type="text" name="studentSignUpUsername" id="studentSignUpUsername" placeholder="Enter Username" class="form-control" required>
+                            </div>
+                            <div class="form-group my-4">
+                                <label for="Name" style="font-weight: 700;"><i class="fa-solid fa-signature"></i> Fullname</label>
+                                <input type="text" name="studentSignUpName" id="studentSignUpName" placeholder="Enter Fullname" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group my-4">
+                                <label for="Department" style="font-weight: 700;" class="form-label"> Department</label>
+                                <select class="form-control" id="studentDepartment" name="studentDepartment" required>
+                                    <option value="">---Select Department</option>
+                                    <option value="CCS">College of Computing Studies </option>
+                                    <option value="CTE">College of Teacher Education</option>
+                                    <option value="CAFED">College of Agriculture, Forestry, Enginnering</option>
+                                    <option value="CBME">College of Business, Management and Entrepreneurship</option>
+                                    <option value="LHS">Laboratory High School</option>
+                                </select>
+                            </div>
+                            <div class="form-group my-4">
+                                <label for="pass" style="font-weight: 700;"><i class="fa-solid fa-lock"></i> Password</label>
+                                <input type="password" name="checkSignUpPassword" id="checkSignUpPassword" placeholder="Enter Password" class="form-control" required>
+                            </div>
+                            <div class="form-group my-4">
+                                <label for="pass" style="font-weight: 700;"><i class="fa-solid fa-lock"></i> Confirm Password</label>
+                                <input type="password" name="studentSignUpPassword" id="studentSignUpPassword" placeholder="Enter Password" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="Signup()">Signup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End modal -->
