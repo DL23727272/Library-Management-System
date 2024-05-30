@@ -151,7 +151,7 @@
              
           </div>
           <div class="col-md-6 text-end">
-              <button class="btn btn-outline-dark" onclick="borrowBook()">Borrow Book</button>
+              <button class="btn btn-outline-dark" id="borrowButton">Borrow Book</button>
           </div>
         
       </div>
@@ -304,7 +304,95 @@
               }
           }
     
+        $(document).ready(function () {
+            // Function to retrieve student information from localStorage
+            function getStudentInfo() {
+                var studentID = sessionStorage.getItem('studentID');
+                var studentName = sessionStorage.getItem('studentName');
+                return { studentID: studentID, studentName: studentName };
+            }
+        
+            // Function to retrieve books from the cart stored in localStorage
+            function getCartItems() {
+                var cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+                return cartItems;
+            }
+        
+            // Function to send borrow request to server
+            function sendBorrowRequest(studentID, studentName, books) {
+                // Prepare data to be sent in the request
+                var requestData = {
+                    studentID: studentID,
+                    studentName: studentName,
+                    books: books
+                };
+        
+                $.ajax({
+                    type: 'POST',
+                    url: 'process/borrowProcess.php',
+                    data: JSON.stringify(requestData),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // Handle success response from server
+                        console.log('Borrow request successful:', response);
+                        // Clear cart after successful borrow
+                        clearCart();
+                        // Optionally, show a success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Books borrowed successfully!',
+                            showConfirmButton: false,
+                            timer: 2000 
+                        });
+                        setTimeout(function () {
+                                    location.reload();
+                        }, 2000);
 
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response from server
+                        console.error('Error sending borrow request:', error);
+                        // Optionally, show an error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed to borrow books',
+                            text: 'An error occurred while processing your request. Please try again later.'
+                        });
+                    }
+                });
+            }
+        
+            // Function to clear the cart after borrowing
+            function clearCart() {
+                localStorage.removeItem('cartItems');
+            }
+        
+            // Event listener for the borrow button click
+            $('#borrowButton').click(function () {
+                // Retrieve student information
+                var studentInfo = getStudentInfo();
+                var studentID = studentInfo.studentID;
+                var studentName = studentInfo.studentName;
+        
+                // Retrieve books from the cart
+                var books = getCartItems();
+        
+                // Check if there are books in the cart
+                if (books.length === 0) {
+                    // Optionally, show a message indicating that the cart is empty
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Empty Cart',
+                        text: 'There are no books in your cart to borrow.'
+                    });
+                    return; // Exit function if cart is empty
+                }
+        
+                // Send borrow request to server
+                sendBorrowRequest(studentID, studentName, books);
+            });
+        });
+        
     </script>
 </body>
 </html>
