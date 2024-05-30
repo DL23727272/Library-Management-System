@@ -197,8 +197,8 @@
                           });
                           
 
-                          var customerID = response.id;
-                          sessionStorage.setItem('studentID', customerID);
+                          var studentID = response.studentID;
+                          sessionStorage.setItem('studentID', studentID);
       
                           var customerNameInput = document.getElementById("studentName").value;
                           var customerName = customerNameInput;
@@ -276,6 +276,12 @@
                 dataType: "json",
                 success: function(response) {
                     if (response.status === 'success') {
+                        $("#studentSignUpidNumber").val("");
+                        $("#studentSignUpName").val("");
+                        $("#studentSignUpUsername").val("");
+                        $("#studentDepartment").val("");
+                        $("#studentSignUpPassword").val("");
+                        $("#checkSignUpPassword").val("");
                         //alertify.success(response.message);
                         Swal.fire({
                             icon: 'success',

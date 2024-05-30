@@ -22,7 +22,7 @@ include "../process/myConnection.php";
                 $row = mysqli_fetch_assoc($result);
                 // Verify hashed password
                 if ($hashedPassword === $row['password']) {
-                    $studentID = $row['id'];
+                    $studentID = $row['idNumber'];
                     $studentName = $row['fullName'];
                     $userType = $row['type'];
                     // Passwords match, login successful
@@ -30,7 +30,7 @@ include "../process/myConnection.php";
                         'status' => 'success',
                         'message' => 'Welcome!',
 
-                        'customerID' => $studentID,
+                        'studentID' => $studentID,
                         'customerName' => $studentName,
                         'userType' => $userType
 
