@@ -8,9 +8,9 @@ echo '<div id="usersContainer" class="row justify-content-center m-2">';
 
 while ($row = mysqli_fetch_assoc($result)) {
     echo '<div class="card mt-4 m-3 p-3 col-12 col-md-6 col-lg-3">';
-    echo '<hr class="border-success border-2"/>';
     echo '<div>';
     echo '<h4 class="card-title" id="name'. $row['idNumber'] .'">'. $row['fullName'] .'</h4>';
+    echo '<hr class="border-success border-2"/>';
     echo '<p class="card-text text-secondary" id="userName">'. $row['username'] .'</p>';
     echo '<p class="card-text text-secondary" id="userDepartment">'. $row['department'] .'</p>';
     echo '</div>';

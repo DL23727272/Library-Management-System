@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2024 at 03:40 AM
+-- Generation Time: May 31, 2024 at 01:18 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -41,8 +41,11 @@ CREATE TABLE `books_table` (
 --
 
 INSERT INTO `books_table` (`bookID`, `bookTitle`, `bookAuthor`, `bookISBN`, `bookStatus`, `bookImage`) VALUES
-(1, 'TEST', 'DL', '978-3-16-148410-0', 'Available', 'book191768.png'),
-(2, 'Book 2', 'DL', '978-3-16-148410-1', 'Available', 'book256883.png');
+(2, 'Book 2', 'DL', '978-3-16-148410-1', 'Borrowed', 'book256883.png'),
+(3, 'Book 3', 'DL', '978-3-16-148410-2', 'Borrowed', 'book355267.png'),
+(4, 'Book 4', 'DL', '978-3-16-148410-3', 'Borrowed', 'book428882.png'),
+(5, 'Book 5', 'DL', '978-3-16-148410-4', 'Borrowed', 'book595040.png'),
+(6, 'Book 1', 'DL', '978-3-16-148410-0', 'Borrowed', 'book165269.png');
 
 -- --------------------------------------------------------
 
@@ -59,14 +62,6 @@ CREATE TABLE `borrowed_books` (
   `book_isbn` varchar(20) NOT NULL,
   `borrow_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `borrowed_books`
---
-
-INSERT INTO `borrowed_books` (`id`, `student_id`, `student_name`, `book_title`, `book_author`, `book_isbn`, `borrow_date`) VALUES
-(1, 'A21-00001', 'DL', 'Book 2', 'DL', '978-3-16-148410-1', '2024-05-30 18:38:49'),
-(2, 'A21-00001', 'DL', 'TEST', 'DL', '978-3-16-148410-0', '2024-05-30 18:38:49');
 
 -- --------------------------------------------------------
 
@@ -89,10 +84,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `idNumber`, `fullName`, `username`, `department`, `password`, `type`) VALUES
-(1, 'A21-00003', 'Mark Jeriel', 'jeriel', 'CCS', '202cb962ac59075b964b07152d234b70', 'user'),
-(2, 'A21-00001', 'DL Gamoso', 'DL', 'CCS', '202cb962ac59075b964b07152d234b70', 'user'),
-(3, 'A21-00002', 'Phoebe Gamoso', 'Phoebe', 'CTE', '202cb962ac59075b964b07152d234b70', 'user'),
-(4, 'A21-00004', 'Shanne Cabotaje', 'Shanne', 'CCS', '202cb962ac59075b964b07152d234b70', 'user');
+(1, '000000', 'Admin 1', 'admin', 'CCS', '202cb962ac59075b964b07152d234b70', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -124,19 +116,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `books_table`
 --
 ALTER TABLE `books_table`
-  MODIFY `bookID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bookID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `borrowed_books`
 --
 ALTER TABLE `borrowed_books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
