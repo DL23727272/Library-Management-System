@@ -30,6 +30,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             data-bs-toggle="modal" data-bs-target="#editBookModal'. $row['bookID'] .'">
             Edit
           </button>';
+    echo '<button class="btn btn-danger delete-book mt-3" data-book-id="'. $row['bookID'] .'">Delete</button>';
+
 
     // Modal
     echo '<div class="modal fade" id="editBookModal'. $row['bookID'] .'" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">';

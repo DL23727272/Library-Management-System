@@ -197,7 +197,9 @@
             // Update cart count in navbar
             displayCartCount();
         });
-    
+
+
+        //ADD BOOK
         $(document).on('click', '#addBookButton', function () {
             console.log("Submit button clicked"); // Debug statement
     
@@ -256,7 +258,9 @@
                 }
             });
         });
+        //End ADD BOOK
     
+        //LOAD BOOKS
         function loadBooks() {
             $.ajax({
                 url: 'process/adminFetchBooks.php',
@@ -275,6 +279,9 @@
     
         loadBooks();
 
+        //END LOAD BOOKS
+        
+        //EDIT BOOK
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelectorAll('.edit-book').forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -326,6 +333,44 @@
             });
                         
         });
+        //END EDIT BOOK
+        
+        //DELETE BOOK
+        $(document).on('click', '.delete-book', function () {
+            var bookID = $(this).data('book-id');
+        
+            $.ajax({
+                type: 'POST',
+                url: 'process/deleteBook.php',
+                data: { bookID: bookID },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        // Error deleting book
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle AJAX error
+                    console.error("AJAX request error:", xhr.responseText);
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        });
+        //END DELETE BOOK
+
        
     </script>
     
