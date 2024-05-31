@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Admin</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -83,8 +83,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="cart.html">
-                  Cart(<span id="cartCount">0</span>)
+                <a class="nav-link " href="user.html">
+                 Users
                 </a>
               </li>
             </ul>
@@ -93,12 +93,6 @@
         </div>
       </nav>
       <!--End ti Navbar -->
-
-      <!-- <div class="mt-5">
-        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#addBookModal"> 
-         <button class="btn btn-outline-success" >Add Product</button>
-        </a>
-     </div> -->
 
       <!-- MODAL -->
 
@@ -117,14 +111,14 @@
             srcset=""
           />
           <p class="w-75 lead text-secondary fst-italic">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus
-             blanditiis repudiandae illum impedit voluptate pariatur sed possimus
-             porro unde delectus iure illo distinctio et veritatis animi nesciunt, sunt ducimus 
-             id ratione dolores. Deserunt veritatis quo natus ut repellat, asperiores dolorem.t.
+            Starbucks is more than just a coffee shop; it's a community hub where
+            people connect over delicious drinks and meaningful moments. With our
+            expertly crafted coffees, teas, and snacks, every visit is an
+            opportunity to treat yourself to quality and comfort. From our iconic
+            lattes to seasonal favorites, there's something for every palate. Join
+            us at Starbucks and let's make every sip count.
           </p>
-          <!-- <a class="nav-link" data-bs-toggle="modal" data-bs-target="#addProduct"> 
-          <button class="btn btn-outline-success" >Add Product</button>
-          </a> -->
+         
         </div>
       </section>
       <!-- End Hero-->
@@ -135,6 +129,11 @@
         <div class="container-sm">
           <div class="row justify-content-center">
             <div class="col-12 text-center">
+                <div class="mt-5">
+                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#addBookModal"> 
+                        <button class="btn btn-outline-success" >Add Book</button>
+                    </a>
+                 </div>
               <h1 class="fw-bold">Library Books</h1>
             </div>
           </div>
@@ -143,6 +142,7 @@
           </div>
         </div>
       </section>
+      
     
       <!---Footer-->
       <footer class="mt-5 text-white p-3" style="background-color: #008000;">
@@ -173,15 +173,15 @@
     
         $(document).ready(function () {
             $('#modalContainer').load('modal.html');
-        });
+          });
     
         document.addEventListener("DOMContentLoaded", function () {
             var studentID = sessionStorage.getItem('studentID');
             var studentName = sessionStorage.getItem('studentName');
             var bookItems = JSON.parse(localStorage.getItem("bookItems")) || [];
             // Check if customerID is present
-            if (customerID) {
-                document.getElementById('studentID').innerText = 'Student Name: ' + customerName;
+            if (studentID) {
+                document.getElementById('studentID').innerText = 'Student Name: ' + studentName;
                 console.log('Customer ID ' + studentID)
                 console.log('Customer Name ' + studentName);
                 console.log(cartItems)
@@ -194,7 +194,6 @@
             displayCartCount();
         });
     
-        //add book
         $(document).on('click', '#addBookButton', function () {
             console.log("Submit button clicked"); // Debug statement
     
@@ -253,11 +252,10 @@
                 }
             });
         });
-        //end add book
     
         function loadBooks() {
             $.ajax({
-                url: 'process/fetchBooks.php',
+                url: 'process/adminFetchBooks.php',
                 success: function (data) {
                     if (data.trim() === '') {
                         $('#bookContent').append('<div><p>NO PRODUCTS AVAILABLE</p></div>');
@@ -272,50 +270,59 @@
         }
     
         loadBooks();
-    
-        $(document).ready(function () {
-            // Function to update cart count in the navbar
-            function displayCartCount() {
-                var cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-                var cartCount = cartItems.length;
-                $('#cartCount').text(cartCount);
-                localStorage.setItem("cartCount", cartCount); 
-            }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('.edit-book').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const bookID = button.getAttribute('data-book-id');
+                    const bookTitle = button.getAttribute('data-book-title');
+                    const bookAuthor = button.getAttribute('data-book-author');
+                    const bookISBN = button.getAttribute('data-book-isbn');
+                    const bookStatus = button.getAttribute('data-book-status');
+                    const bookImage = button.getAttribute('data-book-image');
         
-            // Call displayCartCount on page load to update the cart count display
-            displayCartCount();
-        
-            // Event listener for adding items to the cart
-            $(document).on('click', '.add-to-cart', function () {
-                var bookId = $(this).data('book-id');
-                var bookTitle = $(this).data('book-title');
-                var bookAuthor = $(this).data('book-author');
-                var bookISBN = $(this).data('book-isbn');
-        
-                var cartItem = {
-                    id: bookId,
-                    title: bookTitle,
-                    author: bookAuthor,
-                    isbn: bookISBN
-                };
-        
-                var cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-                cartItems.push(cartItem);
-                localStorage.setItem("cartItems", JSON.stringify(cartItems));
-        
-                // Update cart count display
-                displayCartCount();
-        
-                // Show success message
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Book added to cart!',
-                    showConfirmButton: false,
-                    timer: 2000 
+                    document.getElementById('editBookID').value = bookID;
+                    document.getElementById('editBookTitle').value = bookTitle;
+                    document.getElementById('editBookAuthor').value = bookAuthor;
+                    document.getElementById('editBookISBN').value = bookISBN;
+                    document.getElementById('editBookStatus').value = bookStatus;
                 });
             });
+            // Add this script in your JavaScript section
+            $(document).on('submit', '.edit-book-form', function (e) {
+                e.preventDefault();
+
+                // Serialize form data
+                var formData = $(this).serialize();
+
+                var modalId = $(this).attr('id').replace('editBookForm', '#editBookModal');
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'process/updateBook.php',
+                    data: formData,
+                    success: function (response) {
+                        // Handle success response
+                        console.log(response);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.message,
+                        });
+                        $(modalId).modal('hide');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+                        
         });
-        
+       
     </script>
     
 </body>

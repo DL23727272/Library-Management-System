@@ -21,20 +21,22 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '<p class="card-text text-secondary" id="bookISBN">'. $row['bookISBN'] .'</p>';
     echo '<p class="card-text text-secondary" id="bookStatus">'. $row['bookStatus'] .'</p>';
     echo '</div>';
-    echo '<button class="btn btn-primary add-to-cart" data-book-id="'. $row['bookID'] .'" data-book-title="'. $row['bookTitle'] .'" data-book-author="'. $row['bookAuthor'] .'" data-book-isbn="'. $row['bookISBN'] .'">Add to Cart</button>';
+    
+    // Add to Cart button only if the book is available
+    if ($row['bookStatus'] == 'Available') {
+        echo '<button class="btn btn-primary add-to-cart" data-book-id="'. $row['bookID'] .'" data-book-title="'. $row['bookTitle'] .'" data-book-author="'. $row['bookAuthor'] .'" data-book-isbn="'. $row['bookISBN'] .'">Add to Cart</button>';
+    }
+    
     echo '</div>';
 
-    // Increment product count
     $productCount++;
 
-    // Check if 3 products have been printed (to start a new row)
     if ($productCount % 3 == 0) {
-        echo '</div>'; // Close the current row
-        echo '<div class="row justify-content-center m-2">'; // Start a new row
+        echo '</div>'; 
+        echo '<div class="row justify-content-center m-2">'; 
     }
 }
 
-// Close the row if there are remaining products
 if ($productCount % 3 != 0) {
     echo '</div>';
 }

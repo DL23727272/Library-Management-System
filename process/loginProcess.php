@@ -32,7 +32,7 @@ include "../process/myConnection.php";
 
                         'studentID' => $studentID,
                         'customerName' => $studentName,
-                        'userType' => $userType
+                        'type' => $userType
 
                     ];
                 } else {
