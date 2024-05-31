@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = mysqli_query($con, $sql);
 
         if ($query === true) {
-            echo "Product inserted successfully";
+            echo "Book inserted successfully";
         } else {
             echo "Error inserting product: " . mysqli_error($con);
         }
