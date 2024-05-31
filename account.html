@@ -193,7 +193,7 @@
                      }
                  });
              }
-             // Handle edit user form submission
+              // Handle edit user form submission
             $(document).on('submit', '.edit-user-form', function(e) {
                 e.preventDefault();
 
@@ -206,27 +206,15 @@
                     data: form.serialize(),
                     success: function(response) {
                         if (response == 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'User updated successfully'
-                            });
+                            alertify.success('User updated successfully');
                             fetchUsers();
                             $('#editUserModal' + userID).modal('hide');
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Failed to update user'
-                            });
+                            alertify.error('Failed to update user');
                         }
                     },
                     error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Failed to update user'
-                        });
+                        alertify.error('Failed to update user');
                     }
                 });
             });
@@ -234,6 +222,7 @@
             // Handle delete user
             $(document).on('click', '.delete-user', function() {
                 var userID = $(this).data('user-id');
+                console.log("User ID:", userID); // Add debug logging
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -250,6 +239,7 @@
                             method: 'POST',
                             data: { userID: userID },
                             success: function(response) {
+                                console.log("Delete response:", response); // Add debug logging
                                 if (response == 'success') {
                                     Swal.fire({
                                         icon: 'success',
@@ -265,7 +255,8 @@
                                     });
                                 }
                             },
-                            error: function() {
+                            error: function(xhr, status, error) {
+                                console.log("Error:", error); // Add debug logging
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
@@ -277,7 +268,80 @@
                 });
             });
 
-          });
+
+        });
+
+        
+        function Signup() {
+            // Get form data
+            var studentSignUpidNumber = $("#studentSignUpidNumber").val();
+            var studentSignUpName = $("#studentSignUpName").val();
+            var studentSignUpUsername = $("#studentSignUpUsername").val();
+            var studentDepartment = $("#studentDepartment").val();
+            var studentSignUpPassword = $("#studentSignUpPassword").val();
+            var checkSignUpPassword = $("#checkSignUpPassword").val();
+        
+            // Check if passwords match
+            if (studentSignUpPassword !== checkSignUpPassword) {
+                alertify.error('Passwords do not match!');
+                return; 
+            }
+        
+            // Check for empty fields
+            if (studentSignUpidNumber === "" || studentSignUpName === "" || studentSignUpUsername === "" || studentDepartment === "" || studentSignUpPassword === "" || checkSignUpPassword === "") {
+                alertify.error('Empty fields! Please fill all the fields.');
+            } else {
+                // Log data being sent to server
+                console.log({
+                    studentSignUpidNumber: studentSignUpidNumber,
+                    studentSignUpName: studentSignUpName,
+                    studentSignUpUsername: studentSignUpUsername,
+                    studentDepartment: studentDepartment,
+                    studentSignUpPassword: studentSignUpPassword
+                });
+        
+                // Make AJAX request
+                $.ajax({
+                    type: "POST",
+                    url: "process/signupProcess.php",
+                    data: {
+                        studentSignUpidNumber: studentSignUpidNumber,
+                        studentSignUpName: studentSignUpName,
+                        studentSignUpUsername: studentSignUpUsername,
+                        studentDepartment: studentDepartment,
+                        studentSignUpPassword: studentSignUpPassword
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $("#studentSignUpidNumber").val("");
+                            $("#studentSignUpName").val("");
+                            $("#studentSignUpUsername").val("");
+                            $("#studentDepartment").val("");
+                            $("#studentSignUpPassword").val("");
+                            $("#checkSignUpPassword").val("");
+                            //alertify.success(response.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000 
+                            });
+                            $('#exampleModal').modal('hide');
+                            fetchUsers();
+                        } else {
+                            alertify.error(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error(xhr.responseText);
+                        alertify.error('Failed to sign up!');
+                    }
+                });
+            }
+        }
+        
     
       
 
