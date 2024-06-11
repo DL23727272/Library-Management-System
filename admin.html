@@ -91,6 +91,11 @@
                  Users
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link " href="index.html">
+                  <i class="fa-solid fa-power-off"></i>
+                </a>
+              </li>
             </ul>
           </div>
       
@@ -172,207 +177,187 @@
      <!---End Footer-->
 
  
-    <script type="text/javascript">
-        alertify.set('notifier', 'position', 'top-right');
-    
-        $(document).ready(function () {
-            $('#modalContainer').load('modal.html');
+     <script type="text/javascript">
+      alertify.set('notifier', 'position', 'top-right');
+  
+      $(document).ready(function () {
+          $('#modalContainer').load('modal.html');
+      });
+  
+      document.addEventListener("DOMContentLoaded", function () {
+          var studentID = sessionStorage.getItem('studentID');
+          var studentName = sessionStorage.getItem('studentName');
+          var bookItems = JSON.parse(localStorage.getItem("bookItems")) || [];
+          if (studentID) {
+              document.getElementById('studentID').innerText = 'Student Name: ' + studentName;
+              console.log('Customer ID ' + studentID);
+              console.log('Customer Name ' + studentName);
+              console.log(cartItems);
+          } else {
+              console.log('Customer ID not found in sessionStorage');
+          }
+  
+          displayCartCount();
+      });
+  
+      // ADD BOOK
+      $(document).on('click', '#addBookButton', function () {
+          console.log("Submit button clicked");
+  
+          var formData = new FormData();
+          formData.append('bookTitle', $('#bookTitle').val());
+          formData.append('bookAuthor', $('#bookAuthor').val());
+          formData.append('bookISBN', $('#bookISBN').val());
+          formData.append('bookStatus', $('#bookStatus').val());
+          formData.append('image', $('#productImageName')[0].files[0]);
+  
+          console.log("Form data:", formData);
+  
+          $.ajax({
+              type: 'POST',
+              url: 'process/addBook.php',
+              data: formData,
+              contentType: false,
+              processData: false,
+              beforeSend: function () {
+                  $('#addBookButton').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Submitting...');
+              },
+              success: function (response) {
+                  console.log("AJAX request successful");
+                  console.log("Response:", response);
+  
+                  if (response.trim() === 'Book inserted successfully') {
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Book added successfully',
+                          showConfirmButton: false,
+                          timer: 2000
+                      });
+                      $('#addBookModal').modal('hide');
+                      setTimeout(function () {
+                          location.reload();
+                      }, 3000);
+                  } else {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Failed to add book',
+                          showConfirmButton: false,
+                          timer: 2000
+                      });
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.error("AJAX request error:", xhr.responseText);
+                  alertify.error('Error: ' + xhr.responseText);
+                  $('#addBookButton').prop('disabled', false).html('Submit');
+              }
           });
-    
-        document.addEventListener("DOMContentLoaded", function () {
-            var studentID = sessionStorage.getItem('studentID');
-            var studentName = sessionStorage.getItem('studentName');
-            var bookItems = JSON.parse(localStorage.getItem("bookItems")) || [];
-            // Check if customerID is present
-            if (studentID) {
-                document.getElementById('studentID').innerText = 'Student Name: ' + studentName;
-                console.log('Customer ID ' + studentID)
-                console.log('Customer Name ' + studentName);
-                console.log(cartItems)
-    
-            } else {
-                console.log('Customer ID not found in sessionStorage');
-            }
-    
-            // Update cart count in navbar
-            displayCartCount();
-        });
-
-
-        //ADD BOOK
-        $(document).on('click', '#addBookButton', function () {
-            console.log("Submit button clicked"); // Debug statement
-    
-            // alertify.success("CLICKED");
-    
-            var formData = new FormData();
-            formData.append('bookTitle', $('#bookTitle').val());
-            formData.append('bookAuthor', $('#bookAuthor').val());
-            formData.append('bookISBN', $('#bookISBN').val());
-            formData.append('bookStatus', $('#bookStatus').val());
-            formData.append('image', $('#productImageName')[0].files[0]);
-    
-            console.log("Form data:", formData);
-    
-            $.ajax({
-                type: 'POST',
-                url: 'process/addBook.php',
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-    
-                    $('#addBookButton').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Submitting...');
-                },
-                success: function (response) {
-                    console.log("AJAX request successful");
-                    console.log("Response:", response); // check response  from server uo xd
-    
-                    if (response.trim() === 'Product inserted successfully') {
-                        //  alertify.success('Product added successfully');
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Product added successfully',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                        $('#addBookModal').modal('hide');
-                        setTimeout(function () {
-                            location.reload();
-                        }, 3000);
-                    } else {
-                        //   alertify.error('Failed to add product');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed to add product',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                        $('#addBookButton').prop('disabled', false).html('Submit');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX request error:", xhr.responseText); // Debug statement
-                    alertify.error('Error: ' + xhr.responseText);
-                    $('#addBookButton').prop('disabled', false).html('Submit');
-                }
-            });
-        });
-        //End ADD BOOK
-    
-        //LOAD BOOKS
-        function loadBooks() {
-            $.ajax({
-                url: 'process/adminFetchBooks.php',
-                success: function (data) {
-                    if (data.trim() === '') {
-                        $('#bookContent').append('<div><p>NO PRODUCTS AVAILABLE</p></div>');
-                    } else {
-                        $('#bookContent').append(data);
-                    }
-                },
-                error: function () {
-                    $('#bookContent').append('<div><p>Error loading products. Please try again later.</p></div>');
-                }
-            });
-        }
-    
-        loadBooks();
-
-        //END LOAD BOOKS
-        
-        //EDIT BOOK
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll('.edit-book').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const bookID = button.getAttribute('data-book-id');
-                    const bookTitle = button.getAttribute('data-book-title');
-                    const bookAuthor = button.getAttribute('data-book-author');
-                    const bookISBN = button.getAttribute('data-book-isbn');
-                    const bookStatus = button.getAttribute('data-book-status');
-                    const bookImage = button.getAttribute('data-book-image');
-        
-                    document.getElementById('editBookID').value = bookID;
-                    document.getElementById('editBookTitle').value = bookTitle;
-                    document.getElementById('editBookAuthor').value = bookAuthor;
-                    document.getElementById('editBookISBN').value = bookISBN;
-                    document.getElementById('editBookStatus').value = bookStatus;
-                });
-            });
-
-            $(document).on('submit', '.edit-book-form', function (e) {
-                e.preventDefault();
-
-                // Serialize form data
-                var formData = $(this).serialize();
-
-                var modalId = $(this).attr('id').replace('editBookForm', '#editBookModal');
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'process/updateBook.php',
-                    data: formData,
-                    success: function (response) {
-                        // Handle success response
-                        console.log(response);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                        });
-                        $(modalId).modal('hide');
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error response
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-                        
-        });
-        //END EDIT BOOK
-        
-        //DELETE BOOK
-        $(document).on('click', '.delete-book', function () {
-            var bookID = $(this).data('book-id');
-        
-            $.ajax({
-                type: 'POST',
-                url: 'process/deleteBook.php',
-                data: { bookID: bookID },
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message,
-                        });
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        // Error deleting book
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Handle AJAX error
-                    console.error("AJAX request error:", xhr.responseText);
-                    alert('Error: ' + xhr.responseText);
-                }
-            });
-        });
-        //END DELETE BOOK
-
-       
-    </script>
+      });
+      // END ADD BOOK
+  
+      // LOAD BOOKS
+      function loadBooks() {
+          $.ajax({
+              url: 'process/adminFetchBooks.php',
+              success: function (data) {
+                  if (data.trim() === '') {
+                      $('#bookContent').append('<div><p>NO PRODUCTS AVAILABLE</p></div>');
+                  } else {
+                      $('#bookContent').append(data);
+                  }
+              },
+              error: function () {
+                  $('#bookContent').append('<div><p>Error loading products. Please try again later.</p></div>');
+              }
+          });
+      }
+  
+      loadBooks();
+  
+      // EDIT BOOK
+      document.addEventListener('DOMContentLoaded', (event) => {
+          document.querySelectorAll('.edit-book').forEach(button => {
+              button.addEventListener('click', (e) => {
+                  const bookID = button.getAttribute('data-book-id');
+                  const bookTitle = button.getAttribute('data-book-title');
+                  const bookAuthor = button.getAttribute('data-book-author');
+                  const bookISBN = button.getAttribute('data-book-isbn');
+                  const bookStatus = button.getAttribute('data-book-status');
+                  const bookImage = button.getAttribute('data-book-image');
+  
+                  document.getElementById('editBookID').value = bookID;
+                  document.getElementById('editBookTitle').value = bookTitle;
+                  document.getElementById('editBookAuthor').value = bookAuthor;
+                  document.getElementById('editBookISBN').value = bookISBN;
+                  document.getElementById('editBookStatus').value = bookStatus;
+              });
+          });
+  
+          $(document).on('submit', '.edit-book-form', function (e) {
+              e.preventDefault();
+  
+              var formData = $(this).serialize();
+              var modalId = $(this).attr('id').replace('editBookForm', '#editBookModal');
+  
+              $.ajax({
+                  type: 'POST',
+                  url: 'process/updateBook.php',
+                  data: formData,
+                  success: function (response) {
+                      console.log(response);
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Success',
+                          text: response.message,
+                      });
+                      $(modalId).modal('hide');
+                      setTimeout(function() {
+                          location.reload();
+                      }, 2000);
+                  },
+                  error: function (xhr, status, error) {
+                      console.error(xhr.responseText);
+                  }
+              });
+          });
+      });
+      // END EDIT BOOK
+  
+      // DELETE BOOK
+      $(document).on('click', '.delete-book', function () {
+          var bookID = $(this).data('book-id');
+  
+          $.ajax({
+              type: 'POST',
+              url: 'process/deleteBook.php',
+              data: { bookID: bookID },
+              success: function (response) {
+                  if (response.success) {
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Success',
+                          text: response.message,
+                      });
+                      setTimeout(function() {
+                          location.reload();
+                      }, 2000);
+                  } else {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: response.message,
+                      });
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.error("AJAX request error:", xhr.responseText);
+                  alert('Error: ' + xhr.responseText);
+              }
+          });
+      });
+      // END DELETE BOOK
+  </script>
+  
     
 </body>
 </html>
