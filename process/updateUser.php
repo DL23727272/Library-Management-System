@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['editPassword'];
 
     if (!empty($password)) {
-        $passwordEncrypt = password_hash($password, PASSWORD_BCRYPT);
+        $passwordEncrypt = md5($password);
         $sql = "UPDATE users SET fullName='$fullName', username='$username', department='$department', password='$passwordEncrypt' WHERE idNumber='$userID'";
     } else {
         $sql = "UPDATE users SET fullName='$fullName', username='$username', department='$department' WHERE idNumber='$userID'";

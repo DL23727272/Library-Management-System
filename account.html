@@ -206,7 +206,7 @@
                     data: form.serialize(),
                     success: function(response) {
                         if (response == 'success') {
-                            alertify.success('User updated successfully');
+                         //   alertify.success('User updated successfully');
                             fetchUsers();
                             $('#editUserModal' + userID).modal('hide');
                         } else {
